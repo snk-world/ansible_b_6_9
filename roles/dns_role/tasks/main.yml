@@ -1,0 +1,4 @@
+# tasks file for dns_role
+- name: install dnsmasq
+  package: name=dnsmasq state=latest
+

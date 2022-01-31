@@ -1,0 +1,5 @@
+- name: using dns role 
+  hosts: web
+  become: yes
+  roles: 
+   - role: dns_role

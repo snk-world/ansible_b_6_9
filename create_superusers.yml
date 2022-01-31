@@ -1,0 +1,26 @@
+- hosts: web
+  become: yes
+  tasks:
+        - name: create group
+          ansible.builtin.group:
+              name: SUPERUSERS
+              state: present
+        - name: add user to the group
+          user:
+              name: "{{ item }}"
+              groups: SUPERUSERS
+              password: "123"
+              state: present
+          with_items:
+              - user2
+              - user3
+        - name: Validate the sudoers file before saving
+          ansible.builtin.lineinfile:
+              path: /etc/sudoers
+              state: present
+              regexp: '^%SUPERUSERS ALL='
+              line: '%SUPERUSERS ALL=(ALL) NOPASSWD: ALL'
+              validate: /usr/sbin/visudo -cf %s
+
+    
+           
