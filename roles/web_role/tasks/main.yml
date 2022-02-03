@@ -1,0 +1,48 @@
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+
+- name: install nginx
+  apt:
+     name: nginx 
+ 
+- name: install php
+  apt: name=php-fpm update_cache=yes state=latest
+
+- name: Touch the index
+  ansible.builtin.file:
+    path: /var/www/html/index.php
+    state: touch
+    mode: u+rw,g+wx,o+rwx
+
+- name: Add a line to a file if the file does not exist, without passing regexp
+  ansible.builtin.lineinfile:
+    path: /var/www/html/index.php
+    line: " <?php phpinfo();?>"
+    create: yes
+
+- name: Copy config
+  ansible.builtin.copy:
+    src: nginx.conf
+    dest: /etc/nginx/nginx.conf
+    follow: yes
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /opt/nginx/ansible
+    state: directory
+    mode: '0755'
+
+- name: copy index to another location
+  ansible.builtin.lineinfile:
+    path: /opt/nginx/ansible/index.php
+    line: " <?php phpinfo();?>"
+    create: yes
+ 
+ 
+
+  
+- name: Restart web service 
+  ansible.builtin.service:
+         name: nginx
+         state: restarted

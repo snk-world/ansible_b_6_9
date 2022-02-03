@@ -1,0 +1,6 @@
+---
+- name: using nginx and php role
+  hosts: web
+  become: yes
+  roles:
+     - role: web_role
