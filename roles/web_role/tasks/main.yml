@@ -26,6 +26,8 @@
     src: nginx.conf
     dest: /etc/nginx/nginx.conf
     follow: yes
+  notify:
+   - Restart nginx      
 
 - name: Create a directory if it does not exist
   ansible.builtin.file:
@@ -38,11 +40,8 @@
     path: /opt/nginx/ansible/index.php
     line: " <?php phpinfo();?>"
     create: yes
- 
+  notify: 
+    - Restart nginx 
  
 
-  
-- name: Restart web service 
-  ansible.builtin.service:
-         name: nginx
-         state: restarted
+   
